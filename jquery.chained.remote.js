@@ -96,30 +96,7 @@
                 /* Clear the select. */
                 $("option", self).remove();
 
-                var option_list = [];
-                if ($.isArray(json)) {
-                    if ($.isArray(json[0])) {
-                        /* JSON is already an array of arrays. */
-                        /* [["","--"],["series-1","1 series"],["series-3","3 series"]] */
-                        option_list = json;
-                    } else {
-                        /* JSON is an array of objects. */
-                        /* [{"":"--"},{"series-1":"1 series"},{"series-3":"3 series"}] */
-                        option_list = $.map(json, function(value) {
-                            return $.map(value, function(value, index) {
-                                return [[index, value]];
-                            });
-                        });
-                    }
-                } else {
-                    /* JSON is an JavaScript object. Rebuild it as an array. */
-                    /* {"":"--","series-1":"1 series","series-3":"3 series"} */
-                    for (var index in json) {
-                        if (json.hasOwnProperty(index)) {
-                            option_list.push([index, json[index]]);
-                        }
-                    }
-                }
+                var option_list = settings.data_formatter(json);
 
                 /* Add new options from json. */
                 for (var i=0; i!==option_list.length; i++) {
@@ -157,11 +134,38 @@
 
     /* Default settings for plugin. */
     $.fn.remoteChained.defaults = {
-        attribute: "name",
+        attribute : "name",
         depends : null,
         bootstrap : null,
         loading : null,
-        clear : false
+        clear : false,
+        data_formatter : function(json){
+            var option_list = [];
+            if ($.isArray(json)) {
+                if ($.isArray(json[0])) {
+                    /* JSON is already an array of arrays. */
+                    /* [["","--"],["series-1","1 series"],["series-3","3 series"]] */
+                    option_list = json;
+                } else {
+                    /* JSON is an array of objects. */
+                    /* [{"":"--"},{"series-1":"1 series"},{"series-3":"3 series"}] */
+                    option_list = $.map(json, function(value) {
+                        return $.map(value, function(value, index) {
+                            return [[index, value]];
+                        });
+                    });
+                }
+            } else {
+                /* JSON is an JavaScript object. Rebuild it as an array. */
+                /* {"":"--","series-1":"1 series","series-3":"3 series"} */
+                for (var index in json) {
+                    if (json.hasOwnProperty(index)) {
+                        option_list.push([index, json[index]]);
+                    }
+                }
+            }
+            return option_list;
+        }
     };
 
 })(window.jQuery || window.Zepto, window, document);
