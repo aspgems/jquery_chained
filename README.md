@@ -85,6 +85,42 @@ $("#engine").chained("#series, #model");
 
 For instructions on how how to build selects using JSON data, see the [project homepage](http://www.appelsiini.net/projects/chained).
 
+## Using AJAX with custom data format
+Add a property called `data_formatter` to the object you pass in. This will be a function that returns an array of arrays in the form of `[[valueOfOption1, textOfOption1], [valueOfOption2, textOfOption2]]`. If used with a loading indicator, it must handle getting passed in a string. (should just return an array of an array like the one showed above, but just with a loading indicator) Example code is shown below.
+
+## Using AJAX with dynamic URLs
+For fixed URL endpoints, you can pass in a string to the `url` property. However, the URL to send the request to may be calculated at runtime (dynamically generated). For this, simply pass in a function that returns a string for the endpoint to fetch. This can be used in conjunction with `data_formatter` and `loading`. Example code is show below.
+
+```
+// in your HTML
+<input type="text" id="urlToFetch" value="test.json">
+
+// in your test.json file
+[
+  {
+    id: 1,
+    text: "foo"
+  },
+  {
+    id: 2,
+    text: "bar"
+  }
+]
+
+// in your Javascript, suppose #series is statically filled
+$("#series").remoteChainedTo({
+  parents: ["#mark"],
+  url: function(){
+    return $("#urlToFetch").val()
+  },
+  data_formatter: function(data){
+    return data.map(function(entry){
+      return [entry.id, entry.text];
+    });
+  }
+});
+```
+
 # License
 
 All code licensed under the [MIT License](http://www.opensource.org/licenses/mit-license.php).
