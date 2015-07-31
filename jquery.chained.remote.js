@@ -64,7 +64,7 @@
                     if (settings.clear) {
                         if (settings.loading) {
                             /* Clear the select and show loading text. */
-                            build.call(self, {"" : settings.loading});
+                            build.call(self, settings.loading);
                         } else {
                             /* Clear the select. */
                             $("option", self).remove();
@@ -97,14 +97,14 @@
             });
 
             /* Build the select from given data. */
-            function build(json) {
+            function build(input) {
                 /* If select already had something selected, preserve it. */
                 var selected_key = $(":selected", self).val();
 
                 /* Clear the select. */
                 $("option", self).remove();
 
-                var option_list = settings.data_formatter(json);
+                var option_list = settings.data_formatter(input);
 
                 /* Add new options from json. */
                 for (var i=0; i!==option_list.length; i++) {
@@ -148,6 +148,9 @@
         loading : null,
         clear : false,
         data_formatter : function(json){
+            if (typeof json == 'string') {
+                return [["", settings.loading]]
+            };
             var option_list = [];
             if ($.isArray(json)) {
                 if ($.isArray(json[0])) {
