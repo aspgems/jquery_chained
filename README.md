@@ -114,6 +114,9 @@ $("#series").remoteChainedTo({
     return $("#urlToFetch").val()
   },
   data_formatter: function(data){
+    if(typeof data == 'string'){
+      return [["", "Loading..."]];
+    };
     return data.map(function(entry){
       return [entry.id, entry.text];
     });
