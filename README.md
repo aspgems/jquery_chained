@@ -107,7 +107,7 @@ For fixed URL endpoints, you can pass in a string to the `url` property. However
   }
 ]
 
-// in your Javascript, suppose #series is statically filled
+// in your Javascript, suppose #mark is statically filled
 $("#series").remoteChainedTo({
   parents: ["#mark"],
   url: function(){
