@@ -149,7 +149,7 @@
         clear : false,
         data_formatter : function(json){
             if (typeof json == 'string') {
-                return [["", settings.loading]]
+                return [["", json]]
             };
             var option_list = [];
             if ($.isArray(json)) {
